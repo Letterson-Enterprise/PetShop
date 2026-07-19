@@ -2,6 +2,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.OpenApi;
+using Microsoft.OpenApi;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using backend_petshop.Data;
@@ -19,7 +21,12 @@ builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUsuarioValidator>();
 
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+});
+
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -99,3 +106,28 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+internal sealed class BearerSecuritySchemeTransformer : IOpenApiDocumentTransformer
+{
+    public Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken cancellationToken)
+    {
+        document.Components ??= new OpenApiComponents();
+        document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
+        document.Components.SecuritySchemes.Add("Bearer", new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer",
+            In = ParameterLocation.Header,
+            BearerFormat = "JWT",
+            Description = "Insira o token JWT"
+        });
+
+        document.Security ??= new List<OpenApiSecurityRequirement>();
+        document.Security.Add(new OpenApiSecurityRequirement
+        {
+            { new OpenApiSecuritySchemeReference("Bearer"), new List<string>() }
+        });
+
+        return Task.CompletedTask;
+    }
+}
