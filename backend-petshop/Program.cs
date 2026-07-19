@@ -123,7 +123,7 @@ internal sealed class BearerSecuritySchemeTransformer : IOpenApiDocumentTransfor
         document.Security ??= new List<OpenApiSecurityRequirement>();
         document.Security.Add(new OpenApiSecurityRequirement
         {
-            { new OpenApiSecuritySchemeReference("Bearer"), new List<string>() }
+            { new OpenApiSecuritySchemeReference("Bearer", document, null), new List<string>() }
         });
 
         return Task.CompletedTask;
