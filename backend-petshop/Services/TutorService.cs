@@ -47,6 +47,8 @@ namespace backend_petshop.Services
 
             var viaCep = await _viaCepService.ConsultarCep(dto.CEP);
 
+            viaCep.Cep = viaCep.Cep.Replace("-", "").Replace(".", "");
+
             var endereco = _mapper.Map<Endereco>(viaCep);
             endereco.NumeroCasa = dto.NumeroCasa;
             endereco = await _enderecoRepository.Create(endereco);
@@ -75,6 +77,7 @@ namespace backend_petshop.Services
             if (!string.IsNullOrWhiteSpace(dto.CEP))
             {
                 var viaCep = await _viaCepService.ConsultarCep(dto.CEP);
+                viaCep.Cep = viaCep.Cep.Replace("-", "").Replace(".", "");
 
                 var endereco = await _enderecoRepository.GetById(tutor.EnderecoId);
                 if (endereco != null)
