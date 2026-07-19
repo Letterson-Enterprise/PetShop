@@ -26,8 +26,6 @@ builder.Services.AddOpenApi(options =>
     options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
 });
 
-builder.Services.AddSwaggerGen();
-
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
 
