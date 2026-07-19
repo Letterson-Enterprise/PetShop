@@ -14,10 +14,30 @@ using backend_petshop.Services;
 using backend_petshop.Middlewares;
 using backend_petshop.Configurations;
 using backend_petshop.Validators;
+using backend_petshop.DTOs;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var errors = context.ModelState
+                .Where(e => e.Value?.Errors.Count > 0)
+                .SelectMany(e => e.Value.Errors.Select(x => $"{e.Key}: {x.ErrorMessage}"))
+                .ToList();
+
+            var errorResponse = new ErrorResponse
+            {
+                Mensagem = "Erro de validação.",
+                Detalhes = errors
+            };
+
+            return new BadRequestObjectResult(errorResponse);
+        };
+    });
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUsuarioValidator>();
 
