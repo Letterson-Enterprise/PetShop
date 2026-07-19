@@ -146,6 +146,27 @@ internal sealed class BearerSecuritySchemeTransformer : IOpenApiDocumentTransfor
             { new OpenApiSecuritySchemeReference("Bearer", document, null), new List<string>() }
         });
 
+        if (document.Paths is not null)
+        {
+            foreach (var pathItem in document.Paths.Values)
+            {
+                if (pathItem.Operations is null) continue;
+                foreach (var operation in pathItem.Operations.Values)
+                {
+                    if (operation.Parameters is null) continue;
+                    foreach (var parameter in operation.Parameters)
+                    {
+                        if (parameter.Name == "id" && parameter.In == ParameterLocation.Path)
+                        {
+                            parameter.Description = "ID do registro";
+                            if (parameter is OpenApiParameter p)
+                                p.Example = System.Text.Json.JsonSerializer.SerializeToNode(1);
+                        }
+                    }
+                }
+            }
+        }
+
         return Task.CompletedTask;
     }
 }
