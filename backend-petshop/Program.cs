@@ -159,8 +159,15 @@ internal sealed class BearerSecuritySchemeTransformer : IOpenApiDocumentTransfor
                         if (parameter.Name == "id" && parameter.In == ParameterLocation.Path)
                         {
                             parameter.Description = "ID do registro";
-                            if (parameter is OpenApiParameter p)
-                                p.Example = System.Text.Json.JsonSerializer.SerializeToNode(1);
+                            if (parameter is OpenApiParameter p && p.Schema is { } schema)
+                            {
+                                p.Required = false;
+                                var node = System.Text.Json.JsonSerializer.SerializeToNode(1);
+                                var defaultProp = schema.GetType().GetProperty("Default");
+                                var exampleProp = schema.GetType().GetProperty("Example");
+                                defaultProp?.SetValue(schema, node);
+                                exampleProp?.SetValue(schema, node);
+                            }
                         }
                     }
                 }
