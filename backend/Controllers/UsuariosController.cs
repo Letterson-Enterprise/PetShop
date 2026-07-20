@@ -22,8 +22,8 @@ namespace backend_petshop.Controllers
             if (string.IsNullOrWhiteSpace(dto.Login))
                 return BadRequest(new ErrorResponse { Mensagem = "Login é obrigatório." });
 
-            if (string.IsNullOrWhiteSpace(dto.Senha) || dto.Senha.Length < 6)
-                return BadRequest(new ErrorResponse { Mensagem = "Senha deve ter no mínimo 6 caracteres." });
+            if (string.IsNullOrWhiteSpace(dto.Senha) || dto.Senha.Length < 5)
+                return BadRequest(new ErrorResponse { Mensagem = "Senha deve ter no mínimo 5 caracteres." });
 
             if (await _usuarioRepository.LoginExists(dto.Login))
                 return Conflict(new ErrorResponse { Mensagem = "Login já existe." });

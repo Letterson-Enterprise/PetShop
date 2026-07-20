@@ -1,0 +1,62 @@
+<div class="login-wrapper">
+  <mat-card appearance="outlined" class="login-card">
+    <mat-card-header>
+      <mat-card-title>Criar conta</mat-card-title>
+      <mat-card-subtitle>Cadastre-se para ter acesso ao sistema</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Login</mat-label>
+          <input matInput formControlName="login" autocomplete="username" />
+          @if (form.controls.login.hasError('required')) {
+            <mat-error>Login é obrigatório.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Senha</mat-label>
+          <input matInput type="password" formControlName="senha" autocomplete="new-password" />
+          @if (form.controls.senha.hasError('required')) {
+            <mat-error>Senha é obrigatória.</mat-error>
+          }
+          @if (form.controls.senha.hasError('minlength')) {
+            <mat-error>Senha deve ter no mínimo 5 caracteres.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Confirmar senha</mat-label>
+          <input matInput type="password" formControlName="confirmarSenha" autocomplete="new-password" />
+          @if (form.controls.confirmarSenha.hasError('required')) {
+            <mat-error>Confirmação é obrigatória.</mat-error>
+          }
+          @if (form.controls.confirmarSenha.hasError('senhasDiferentes')) {
+            <mat-error>As senhas não conferem.</mat-error>
+          }
+        </mat-form-field>
+
+        @if (error()) {
+          <div class="error-message">{{ error() }}</div>
+        }
+
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          class="full-width"
+          [disabled]="loading()"
+        >
+          @if (loading()) {
+            <mat-spinner [diameter]="20"></mat-spinner>
+          } @else {
+            Criar conta
+          }
+        </button>
+
+        <a mat-button class="full-width voltar" routerLink="/login">Voltar ao login</a>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

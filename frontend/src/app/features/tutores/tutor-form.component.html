@@ -1,0 +1,100 @@
+<div class="header">
+  <h2>{{ id() ? 'Editar Tutor' : 'Novo Tutor' }}</h2>
+</div>
+
+@if (loading()) {
+  <div class="center"><mat-spinner [diameter]="36"></mat-spinner></div>
+} @else {
+  <mat-card appearance="outlined" class="form-card">
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nome</mat-label>
+          <input matInput formControlName="nome" />
+          @if (form.controls.nome.hasError('required')) {
+            <mat-error>Nome é obrigatório.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Data de Nascimento</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="dataNascimento" readonly />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          @if (form.controls.dataNascimento.hasError('required')) {
+            <mat-error>Data é obrigatória.</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="cep-row">
+          <mat-form-field appearance="outline" class="cep-field">
+            <mat-label>CEP</mat-label>
+            <input matInput formControlName="cep" placeholder="00000-000" (blur)="consultarCep()" />
+            @if (form.controls.cep.hasError('required')) {
+              <mat-error>CEP é obrigatório.</mat-error>
+            } @else if (form.controls.cep.hasError('pattern')) {
+              <mat-error>CEP inválido (use 00000-000).</mat-error>
+            }
+          </mat-form-field>
+          <button mat-stroked-button type="button" (click)="consultarCep()" [disabled]="cepConsultando() || form.controls.cep.invalid">
+            @if (cepConsultando()) {
+              <mat-spinner [diameter]="18"></mat-spinner>
+            } @else {
+              <span class="buscar-label"><mat-icon>search</mat-icon> Buscar</span>
+            }
+          </button>
+        </div>
+
+        @if (cepErro()) {
+          <div class="cep-erro">{{ cepErro() }}</div>
+        }
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Logradouro</mat-label>
+          <input matInput formControlName="logradouro" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Bairro</mat-label>
+          <input matInput formControlName="bairro" />
+        </mat-form-field>
+
+        <div class="half-row">
+          <mat-form-field appearance="outline" class="half-field">
+            <mat-label>Cidade</mat-label>
+            <input matInput formControlName="cidade" />
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="half-field">
+            <mat-label>Estado (UF)</mat-label>
+            <input matInput formControlName="uf" />
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Número</mat-label>
+          <input matInput type="number" formControlName="numeroCasa" />
+          @if (form.controls.numeroCasa.hasError('required') || form.controls.numeroCasa.hasError('min')) {
+            <mat-error>Número é obrigatório.</mat-error>
+          }
+        </mat-form-field>
+
+        @if (error()) {
+          <div class="error-message">{{ error() }}</div>
+        }
+
+        <div class="actions">
+          <button mat-stroked-button type="button" (click)="cancelar()" [disabled]="saving()">
+            Cancelar
+          </button>
+          <button mat-flat-button color="primary" type="submit" [disabled]="saving()">
+            @if (saving()) {
+              <mat-spinner [diameter]="20"></mat-spinner>
+            } @else {
+              Salvar
+            }
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+}
