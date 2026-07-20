@@ -40,8 +40,7 @@
             @if (cepConsultando()) {
               <mat-spinner [diameter]="18"></mat-spinner>
             } @else {
-              <mat-icon>search</mat-icon>
-              Buscar
+              <span class="buscar-label"><mat-icon>search</mat-icon> Buscar</span>
             }
           </button>
         </div>
