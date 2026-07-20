@@ -52,7 +52,7 @@ export class AnimaisListComponent implements OnInit {
     this.tutorService.getAll().subscribe({
       next: (tutores) =>
         this.tutores.set(new Map(tutores.map((t) => [t.id, t]))),
-      error: () => {},
+      error: () => this.tutores.set(new Map()),
     });
     this.animalService.getAll().subscribe({
       next: (animais) => this.animais.set(animais),
