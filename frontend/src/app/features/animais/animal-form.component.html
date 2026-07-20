@@ -1,0 +1,76 @@
+<div class="header">
+  <h2>{{ id() ? 'Editar Animal' : 'Novo Animal' }}</h2>
+</div>
+
+@if (loading()) {
+  <div class="center"><mat-spinner [diameter]="36"></mat-spinner></div>
+} @else {
+  <mat-card appearance="outlined" class="form-card">
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nome</mat-label>
+          <input matInput formControlName="nome" />
+          @if (form.controls.nome.hasError('required')) {
+            <mat-error>Nome é obrigatório.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Espécie</mat-label>
+          <input matInput formControlName="especie" />
+          @if (form.controls.especie.hasError('required')) {
+            <mat-error>Espécie é obrigatória.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Peso (kg)</mat-label>
+          <input matInput type="number" step="0.01" formControlName="peso" />
+          @if (form.controls.peso.hasError('required') || form.controls.peso.hasError('min')) {
+            <mat-error>Peso deve ser maior que zero.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Data de Nascimento</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="dataNascimento" readonly />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          @if (form.controls.dataNascimento.hasError('required')) {
+            <mat-error>Data é obrigatória.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Tutor</mat-label>
+          <mat-select formControlName="tutorId">
+            @for (tutor of tutores(); track tutor.id) {
+              <mat-option [value]="tutor.id">{{ tutor.nome }}</mat-option>
+            }
+          </mat-select>
+          @if (form.controls.tutorId.hasError('required') || form.controls.tutorId.hasError('min')) {
+            <mat-error>Selecione um tutor.</mat-error>
+          }
+        </mat-form-field>
+
+        @if (error()) {
+          <div class="error-message">{{ error() }}</div>
+        }
+
+        <div class="actions">
+          <button mat-stroked-button type="button" (click)="cancelar()" [disabled]="saving()">
+            Cancelar
+          </button>
+          <button mat-flat-button color="primary" type="submit" [disabled]="saving()">
+            @if (saving()) {
+              <mat-spinner [diameter]="20"></mat-spinner>
+            } @else {
+              Salvar
+            }
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+}
