@@ -1,0 +1,63 @@
+.header {
+  margin-bottom: 1rem;
+}
+
+.form-card {
+  max-width: 520px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.cep-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.cep-field {
+  flex: 1;
+}
+
+.cep-erro {
+  color: #d32f2f;
+  font-size: 0.85rem;
+  margin: -0.5rem 0 0.75rem;
+}
+
+.half-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.half-field {
+  flex: 1;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.error-message {
+  color: #d32f2f;
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+button[mat-flat-button],
+button[mat-stroked-button] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 40px;
+}

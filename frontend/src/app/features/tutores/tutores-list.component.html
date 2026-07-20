@@ -1,0 +1,52 @@
+<div class="header">
+  <h2>Tutores</h2>
+  <button mat-flat-button color="primary" (click)="novo()">
+    <mat-icon>add</mat-icon>
+    Novo Tutor
+  </button>
+</div>
+
+@if (loading()) {
+  <div class="center"><mat-spinner [diameter]="36"></mat-spinner></div>
+} @else if (error()) {
+  <div class="error-message">{{ error() }}</div>
+} @else if (tutores().length === 0) {
+  <p class="empty">Nenhum tutor cadastrado.</p>
+} @else {
+  <table mat-table [dataSource]="tutores()" class="full-width">
+    <ng-container matColumnDef="nome">
+      <th mat-header-cell *matHeaderCellDef>Nome</th>
+      <td mat-cell *matCellDef="let t">{{ t.nome }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="cidade">
+      <th mat-header-cell *matHeaderCellDef>Cidade</th>
+      <td mat-cell *matCellDef="let t">{{ t.endereco?.cidade || '—' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="uf">
+      <th mat-header-cell *matHeaderCellDef>UF</th>
+      <td mat-cell *matCellDef="let t">{{ t.endereco?.uf || '—' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="animais">
+      <th mat-header-cell *matHeaderCellDef>Animais</th>
+      <td mat-cell *matCellDef="let t">{{ t.animais?.length || 0 }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="acoes">
+      <th mat-header-cell *matHeaderCellDef>Ações</th>
+      <td mat-cell *matCellDef="let t">
+        <a mat-icon-button color="primary" [routerLink]="['/tutores', t.id, 'editar']">
+          <mat-icon>edit</mat-icon>
+        </a>
+        <button mat-icon-button color="warn" (click)="excluir(t)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+}
