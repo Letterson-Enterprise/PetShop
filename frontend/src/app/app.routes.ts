@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { LoginComponent } from './features/auth/login.component';
+import { RegistroComponent } from './features/auth/registro.component';
 import { LayoutComponent } from './shared/layout/layout.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  { path: 'registro', component: RegistroComponent },
   {
     path: '',
     component: LayoutComponent,

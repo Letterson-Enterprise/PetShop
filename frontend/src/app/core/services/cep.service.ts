@@ -7,7 +7,7 @@ import { ViaCepResponse } from '../models/viacep.model';
 @Injectable({ providedIn: 'root' })
 export class CepService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = environment.viaCepUrl;
+  private readonly baseUrl = environment.apiUrl;
 
   consultar(cep: string): Observable<ViaCepResponse> {
     const cepLimpo = cep.replace(/\D/g, '');
