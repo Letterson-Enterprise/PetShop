@@ -13,7 +13,7 @@ namespace backend_petshop.Validators
 
             RuleFor(u => u.Senha)
                 .NotEmpty().WithMessage("Senha é obrigatória.")
-                .MinimumLength(6).WithMessage("Senha deve ter no mínimo 6 caracteres.");
+                .MinimumLength(5).WithMessage("Senha deve ter no mínimo 5 caracteres.");
         }
     }
 
